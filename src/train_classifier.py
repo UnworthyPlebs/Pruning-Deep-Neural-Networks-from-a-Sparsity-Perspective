@@ -163,7 +163,7 @@ def train(data_loader, model, optimizer, mask, metric, logger, iter, epoch):
                              'Train Epoch: {}({:.0f}%)'.format(epoch, 100. * i / len(data_loader)),
                              'Train Iter: {}/{}'.format(iter, cfg['prune_iters']),
                              'Learning rate: {:.6f}'.format(lr), 'Epoch Finished Time: {}'.format(epoch_finished_time),
-                             'Experiment Finished Time: {}'.format(exp_finished_time)]}
+                             'Experiment Find Time: {}'.format(exp_finished_time)]}
             logger.append(info, 'train', mean=False)
             print(logger.write('train', metric.metric_name['train']))
     return
