@@ -1,7 +1,7 @@
 #!/bin/bash
 
 resume_mode=0
-num_gpus=1
+num_gpus=2
 round=8
 num_experiments=4
 world_size=1
