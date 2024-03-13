@@ -148,11 +148,11 @@ def process_control():
     else:
         cfg[model_name]['scheduler_name'] = 'CosineAnnealingLR'
     if model_name in ['linear', 'mlp', 'cnn']:
-        cfg[model_name]['num_epochs'] = 100
+        cfg[model_name]['num_epochs'] = 80
     elif model_name in ['resnet9', 'resnet18', 'wresnet28x2', 'wresnet28x8']:
-        cfg[model_name]['num_epochs'] = 100
+        cfg[model_name]['num_epochs'] = 80
     elif model_name in ['resnet50']:
-        cfg[model_name]['num_epochs'] = 100
+        cfg[model_name]['num_epochs'] = 80
     else:
         raise ValueError('Not valid model name')
     if cfg['data_name'] in ['ImageNet']:
@@ -160,7 +160,7 @@ def process_control():
     elif cfg['data_name'] in ['TinyImageNet']:
         cfg[model_name]['batch_size'] = {'train': 1000, 'test': 1000}
     else:
-        cfg[model_name]['batch_size'] = {'train': 2000, 'test': 2000}
+        cfg[model_name]['batch_size'] = {'train': 750, 'test': 750}
     cfg['p'] = torch.arange(0.1, 1.1, 0.1)
     cfg['q'] = torch.arange(1.0, 2.1, 0.1)
     cfg['beta'] = 0.9
