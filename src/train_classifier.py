@@ -184,6 +184,8 @@ def test(data_loader, model, metric, logger, iter, epoch):
                          'Test Iter: {}/{}'.format(iter, cfg['prune_iters'])]}
         logger.append(info, 'test', mean=False)
         print(logger.write('test', metric.metric_name['test']))
+        with open('test2.txt', 'a') as f:
+            print(logger.write('test', metric.metric_name['test']), file=f)
     return
 
 
