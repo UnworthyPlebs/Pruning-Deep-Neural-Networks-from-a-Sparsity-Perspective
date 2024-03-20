@@ -5,6 +5,7 @@ import os
 import shutil
 import time
 import torch
+import torch.nn as nn
 import torch.backends.cudnn as cudnn
 from config import cfg, process_args
 from data import fetch_dataset, make_data_loader
@@ -12,6 +13,8 @@ from metrics import Metric
 from utils import save, to_device, process_control, process_dataset, make_optimizer, make_scheduler, resume, collate
 from logger import make_logger
 from modules import Compression, Mask, SparsityIndex
+from torch.nn.parallel import DistributedDataParallel as DDP
+
 
 cudnn.benchmark = True
 parser = argparse.ArgumentParser(description='cfg')
@@ -69,7 +72,7 @@ def runExperiment():
         mask.load_state_dict(mask_state_dict[-1])
         logger = result['logger']
     if cfg['world_size'] > 1:
-        model = torch.nn.DataParallel(model, device_ids=list(range(cfg['world_size'])))
+        model = DDP(model, device_ids=list(range(cfg['world_size'])))
     compression = Compression(cfg['prune_scope'], cfg['prune_mode'])
     sparsity_index = SparsityIndex(cfg['p'], cfg['q'])
     for iter in range(last_iter, cfg['prune_iters'] + 1):
