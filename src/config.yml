@@ -12,6 +12,6 @@ init_seed: 0
 num_experiments: 1
 log_interval: 0.25
 device: cuda
-world_size: 1
+world_size: 2
 resume_mode: 0
 verbose: False
