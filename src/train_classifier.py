@@ -6,6 +6,7 @@ import shutil
 import time
 import torch
 import torch.nn as nn
+import torch.distributed as dist
 import torch.backends.cudnn as cudnn
 from config import cfg, process_args
 from data import fetch_dataset, make_data_loader
@@ -72,6 +73,7 @@ def runExperiment():
         mask.load_state_dict(mask_state_dict[-1])
         logger = result['logger']
     if cfg['world_size'] > 1:
+        dist.init_process_group("nccl", rank=rank, world_size=world_size)
         model = DDP(model)
     compression = Compression(cfg['prune_scope'], cfg['prune_mode'])
     sparsity_index = SparsityIndex(cfg['p'], cfg['q'])
