@@ -72,7 +72,7 @@ def runExperiment():
         mask.load_state_dict(mask_state_dict[-1])
         logger = result['logger']
     if cfg['world_size'] > 1:
-        model = DDP(model, device_ids=list(range(cfg['world_size'])))
+        model = DDP(model)
     compression = Compression(cfg['prune_scope'], cfg['prune_mode'])
     sparsity_index = SparsityIndex(cfg['p'], cfg['q'])
     for iter in range(last_iter, cfg['prune_iters'] + 1):
