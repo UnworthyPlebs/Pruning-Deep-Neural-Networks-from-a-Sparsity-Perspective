@@ -73,7 +73,7 @@ def runExperiment():
         mask.load_state_dict(mask_state_dict[-1])
         logger = result['logger']
     if cfg['world_size'] > 1:
-        dist.init_process_group("nccl", rank=[0,1], world_size=world_size)
+        dist.init_process_group("nccl", rank= dist.getrank(), world_size=world_size)
         model = DDP(model)
     compression = Compression(cfg['prune_scope'], cfg['prune_mode'])
     sparsity_index = SparsityIndex(cfg['p'], cfg['q'])
