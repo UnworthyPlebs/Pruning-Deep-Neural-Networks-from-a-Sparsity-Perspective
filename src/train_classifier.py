@@ -19,7 +19,7 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 os.environ["RANK"] = "0"
 os.environ["WORLD_SIZE"] = "2"
 os.environ['MASTER_ADDR'] = '127.0.0.1'
-os.environ['MASTER_PORT'] = '13300'
+os.environ['MASTER_PORT'] = '2925'
 cudnn.benchmark = True
 parser = argparse.ArgumentParser(description='cfg')
 for k in cfg:
