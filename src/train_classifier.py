@@ -8,6 +8,7 @@ import torch
 import torch.nn as nn
 import torch.distributed as dist
 import torch.backends.cudnn as cudnn
+import torch.multiprocessing as mp
 from config import cfg, process_args
 from data import fetch_dataset, make_data_loader
 from metrics import Metric
@@ -15,6 +16,7 @@ from utils import save, to_device, process_control, process_dataset, make_optimi
 from logger import make_logger
 from modules import Compression, Mask, SparsityIndex
 from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.distributed import init_process_group, destroy_process_group
 
 os.environ["RANK"] = "0"
 os.environ["WORLD_SIZE"] = "2"
