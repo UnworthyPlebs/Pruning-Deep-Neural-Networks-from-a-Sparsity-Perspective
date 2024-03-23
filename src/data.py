@@ -4,6 +4,7 @@ from config import cfg
 from torchvision import transforms
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.data.dataloader import default_collate
+from torch.utils.data.distributed import DistributedSampler
 
 data_stats = {'MNIST': ((0.1307,), (0.3081,)), 'FashionMNIST': ((0.2860,), (0.3530,)),
               'CIFAR10': ((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
@@ -97,7 +98,7 @@ def input_collate(batch):
         return default_collate(batch)
 
 
-def make_data_loader(dataset, tag, batch_size=None, shuffle=None, sampler=None):
+def make_data_loader(dataset, tag, batch_size=None, shuffle=False, sampler=DistributedSampler(dataset):
     data_loader = {}
     for k in dataset:
         _batch_size = cfg[tag]['batch_size'][k] if batch_size is None else batch_size[k]
