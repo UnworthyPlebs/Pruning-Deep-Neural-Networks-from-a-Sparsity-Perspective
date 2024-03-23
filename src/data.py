@@ -98,7 +98,7 @@ def input_collate(batch):
         return default_collate(batch)
 
 
-def make_data_loader(dataset, tag, batch_size=None, shuffle=False, sampler=DistributedSampler(Dataset)):
+def make_data_loader(dataset, tag, batch_size=None, shuffle=False, sampler=DistributedSampler(data_name)):
     data_loader = {}
     for k in dataset:
         _batch_size = cfg[tag]['batch_size'][k] if batch_size is None else batch_size[k]
