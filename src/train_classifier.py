@@ -202,5 +202,5 @@ def test(data_loader, model, metric, logger, iter, epoch):
 
 if __name__ == "__main__":
     world_size = torch.cuda.device_count()
-    mp.spawn(train, args = world_size, epoch), nprocs = world_size)
+    mp.spawn(train, args =(world_size, epoch), nprocs = world_size)
     main()
