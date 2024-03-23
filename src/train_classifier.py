@@ -18,10 +18,6 @@ from modules import Compression, Mask, SparsityIndex
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.distributed import init_process_group, destroy_process_group
 
-os.environ["RANK"] = "0"
-os.environ["WORLD_SIZE"] = "2"
-os.environ['MASTER_ADDR'] = '127.0.0.1'
-os.environ['MASTER_PORT'] = '2925'
 cudnn.benchmark = True
 parser = argparse.ArgumentParser(description='cfg')
 for k in cfg:
@@ -30,6 +26,10 @@ parser.add_argument('--control_name', default=None, type=str)
 args = vars(parser.parse_args())
 process_args(args)
 
+def setup(rank, world_size):
+    os.environ["MASTER_ADDR"] = "localhost"
+    os.environ["MASTER_PORT"] = "12356"
+    init_process_group(backend="nccl", rank=rank, world_size=cfg['world_size']
 
 def main():
     process_control()
@@ -77,10 +77,7 @@ def runExperiment():
         mask_state_dict = result['mask_state_dict']
         mask.load_state_dict(mask_state_dict[-1])
         logger = result['logger']
-    if cfg['world_size'] > 1:
-        torch.distributed.init_process_group(backend="nccl")
-        dist.init_process_group("nccl", rank= dist.get_rank(), world_size=world_size)
-        model = DDP(model)
+
     compression = Compression(cfg['prune_scope'], cfg['prune_mode'])
     sparsity_index = SparsityIndex(cfg['p'], cfg['q'])
     for iter in range(last_iter, cfg['prune_iters'] + 1):
@@ -142,7 +139,8 @@ def runExperiment():
     return
 
 
-def train(data_loader, model, optimizer, mask, metric, logger, iter, epoch):
+def train(data_loader, model, optimizer, mask, metric, logger, iter, epoch, rank: int, world_size: int):
+    setup(rank, world_size)
     model.train(True)
     start_time = time.time()
     for i, input in enumerate(data_loader):
@@ -150,6 +148,7 @@ def train(data_loader, model, optimizer, mask, metric, logger, iter, epoch):
         input_size = input['data'].size(0)
         input = to_device(input, cfg['device'])
         optimizer.zero_grad()
+        model = DDP(model, device_ids=0)
         output = model(input)
         output['loss'] = output['loss'].mean() if cfg['world_size'] > 1 else output['loss']
         output['loss'].backward()
@@ -177,6 +176,7 @@ def train(data_loader, model, optimizer, mask, metric, logger, iter, epoch):
                              'Experiment Find Time: {}'.format(exp_finished_time)]}
             logger.append(info, 'train', mean=False)
             print(logger.write('train', metric.metric_name['train']))
+            destroy_process_group()
     return
 
 
@@ -201,4 +201,6 @@ def test(data_loader, model, metric, logger, iter, epoch):
 
 
 if __name__ == "__main__":
+    world_size = torch.cuda.device_count()
+    mp.spawn(train, args = world_size, epoch), nprocs = world_size)
     main()
