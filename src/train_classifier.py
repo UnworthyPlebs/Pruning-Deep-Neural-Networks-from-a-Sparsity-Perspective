@@ -28,8 +28,8 @@ args = vars(parser.parse_args())
 process_args(args)
 
 def setup(rank, world_size):
-    os.environ["MASTER_ADDR"] = "localhost"
-    os.environ["MASTER_PORT"] = "12358"
+    os.environ["MASTER_ADDR"] = "127.0.0.1"
+    os.environ["MASTER_PORT"] = "12360"
     init_process_group(backend="nccl", rank=rank, world_size=cfg['world_size'])
 
 def main():
