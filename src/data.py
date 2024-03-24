@@ -10,7 +10,7 @@ from torch.utils.data.distributed import DistributedSampler
 os.environ['RANK'] = '0'
 os.environ['WORLD_SIZE'] = '2'
 os.environ['MASTER_ADDR'] = '127.0.0.1'
-os.environ['MASTER_PORT'] = '20582'
+os.environ['MASTER_PORT'] = '12360'
 dist.init_process_group(backend='nccl')
 data_stats = {'MNIST': ((0.1307,), (0.3081,)), 'FashionMNIST': ((0.2860,), (0.3530,)),
               'CIFAR10': ((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
