@@ -22,6 +22,7 @@ data_stats = {'MNIST': ((0.1307,), (0.3081,)), 'FashionMNIST': ((0.2860,), (0.35
 
 def fetch_dataset(data_name, verbose=True):
     import datasets
+    import transforms
     dataset = {}
     if verbose:
         print('fetching data {}...'.format(data_name))
