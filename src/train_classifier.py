@@ -29,7 +29,7 @@ process_args(args)
 
 def setup(rank, world_size):
     os.environ["MASTER_ADDR"] = "localhost"
-    os.environ["MASTER_PORT"] = "12356"
+    os.environ["MASTER_PORT"] = "12358"
     init_process_group(backend="nccl", rank=rank, world_size=cfg['world_size'])
 
 def main():
