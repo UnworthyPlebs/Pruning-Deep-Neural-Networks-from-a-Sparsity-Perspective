@@ -18,6 +18,7 @@ from modules import Compression, Mask, SparsityIndex
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.distributed import init_process_group, destroy_process_group
 
+torch.cuda.set_device(0)
 cudnn.benchmark = True
 parser = argparse.ArgumentParser(description='cfg')
 for k in cfg:
