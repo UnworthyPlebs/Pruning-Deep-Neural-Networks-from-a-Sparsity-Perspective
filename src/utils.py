@@ -156,11 +156,11 @@ def process_control():
     else:
         raise ValueError('Not valid model name')
     if cfg['data_name'] in ['ImageNet']:
-        cfg[model_name]['batch_size'] = {'train': 1024, 'test': 1024}
+        cfg[model_name]['batch_size'] = {'train': 128, 'test': 128}
     elif cfg['data_name'] in ['TinyImageNet']:
-        cfg[model_name]['batch_size'] = {'train': 500, 'test': 500}
+        cfg[model_name]['batch_size'] = {'train': 128, 'test': 128}
     else:
-        cfg[model_name]['batch_size'] = {'train': 250, 'test': 250}
+        cfg[model_name]['batch_size'] = {'train': 128, 'test': 128}
     cfg['p'] = torch.arange(0.1, 1.1, 0.1)
     cfg['q'] = torch.arange(1.0, 2.1, 0.1)
     cfg['beta'] = 0.9
